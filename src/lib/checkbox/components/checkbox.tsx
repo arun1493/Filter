@@ -22,7 +22,7 @@ const CheckBoxGroup = (props: Props) => {
         <label>
             <CheckboxGroup name={name} value={value || []} onChange={onChange}>
                 {(Checkbox) => (
-                    <React.Fragment>
+                    <React.Fragment key={name}>
                         {map(({label, value}) => <label> {label}
                             <Checkbox value={value}/>
                         </label>, options)}
