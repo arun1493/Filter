@@ -5,6 +5,7 @@ import Input from '../../input/components/input';
 import Select from "../../select/components/select";
 import TextArea from "../../text-area/components/text-area";
 import CheckBoxGroup from "../../checkbox/components/checkbox";
+import RadioInput from "../../radio/components/Radio";
 
 interface Props {
     initialValues: FormikValues;
@@ -53,12 +54,25 @@ export const getFormFields = (props: FormikProps<FormikValues>, {label, name, ty
             </React.Fragment>
 
         case ComponentNames.CHECKBOX:
-            const options = componentProps && componentProps.options ? componentProps.options : [];
+            const checkboxOptions = componentProps && componentProps.options ? componentProps.options : [];
             return <React.Fragment key={name}>
                 <CheckBoxGroup
+                    label={label}
                     name={name}
                     value={props.values[name]}
-                    options={options}
+                    options={checkboxOptions}
+                    onChange={(value) => props.setFieldValue(name, value)}
+                />
+            </React.Fragment>
+
+        case ComponentNames.RADIO:
+            const radioOptions = componentProps && componentProps.options ? componentProps.options : [];
+            return <React.Fragment key={name}>
+                <RadioInput
+                    label={label}
+                    name={name}
+                    value={props.values[name]}
+                    options={radioOptions}
                     onChange={(value) => props.setFieldValue(name, value)}
                 />
             </React.Fragment>

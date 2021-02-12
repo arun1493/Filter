@@ -31,9 +31,20 @@ const fields: Array<FormField> = [
         type: ComponentNames.TEXTAREA
     },
     {
+        label: 'Vehicle',
+        name: 'vehicle',
+        type: ComponentNames.CHECKBOX,
+        props: {
+            options: [
+                {label: 'Two Wheeler', value: 'two wheeler'},
+                {label: 'Four Wheeler', value: 'four wheeler'},
+            ]
+        }
+    },
+    {
         label: 'Age',
         name: 'age',
-        type: ComponentNames.CHECKBOX,
+        type: ComponentNames.RADIO,
         props: {
             options: [
                 {label: 'Below 40', value: 'below 40'},
@@ -43,7 +54,7 @@ const fields: Array<FormField> = [
     }
 ];
 
-const [name, gender, hobbies, Age] = fields;
+const [name, gender, hobbies, vehicle, age ] = fields;
 
 
 class Home extends React.Component<{}, State> {
@@ -89,7 +100,10 @@ class Home extends React.Component<{}, State> {
                                 {getFormFields(props, hobbies)}
                             </>
                             <>
-                                {getFormFields(props, Age)}
+                                {getFormFields(props, vehicle)}
+                            </>
+                            <>
+                                {getFormFields(props, age)}
                             </>
                             <button type="submit">Submit</button>
                         </form>

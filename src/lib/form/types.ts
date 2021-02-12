@@ -2,7 +2,8 @@ export enum ComponentNames {
     INPUT = 'INPUT',
     SELECT = 'SELECT',
     TEXTAREA = 'TEXTAREA',
-    CHECKBOX = 'CHECKBOX'
+    CHECKBOX = 'CHECKBOX',
+    RADIO = "RADIO"
 }
 
 export interface FormField {
