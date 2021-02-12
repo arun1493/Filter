@@ -18,5 +18,7 @@ export const ModalContent = styled.div`
   width: 60%;
   min-height: 400px;
   background-color: white;
+  overflow: scroll;
   padding: 25px;
+  height: 400px;
 `

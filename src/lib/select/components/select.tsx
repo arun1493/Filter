@@ -1,5 +1,6 @@
 import React from "react";
 import {map} from 'ramda';
+import {InputContainer} from '../../atoms';
 
 type Option = {
     label: string;
@@ -41,11 +42,13 @@ class Select extends React.Component<Props, State> {
         const {options} = this.state;
         const {onChange, onBlur, value, name, label} = this.props;
         return (
-            <label> {label}
-                <select name={name} onChange={(e) => onChange(e)} onBlur={onBlur} value={value || ''}>
+            <InputContainer>
+            <label> {label}             </label>
+
+        <select name={name} onChange={(e) => onChange(e)} onBlur={onBlur} value={value || ''}>
                     {map(({label, value}: Option) => <option key={label} value={value}>{label}</option>, options)}
                 </select>
-            </label>
+            </InputContainer>
         );
     }
 }

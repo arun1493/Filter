@@ -14,7 +14,6 @@ interface Props {
 }
 
 export const getFormFields = (props: FormikProps<FormikValues>, {label, name, type, props: componentProps}: FormField) => {
-    console.log(props)
     switch (type) {
         case ComponentNames.INPUT:
             return <React.Fragment key={name}>

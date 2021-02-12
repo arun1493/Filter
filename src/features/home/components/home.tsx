@@ -2,11 +2,36 @@ import React from "react";
 import Modal from "../../../lib/modal/components/modal";
 import Form, {getFormFields} from '../../../lib/form/components/form';
 import {ComponentNames, FormField} from "../../../lib/form/types";
-import {FormikProps, FormikValues} from "formik";
+import {FormikHelpers, FormikProps, FormikValues} from "formik";
+import styled from "styled-components";
 
 interface State {
-    showFilterDialog: boolean
+    showFilterDialog: boolean;
+    filterData: object;
 }
+
+const FilterComponentContainer = styled.div`
+  position: relative;
+  top: 180px;
+  left: 330px
+`;
+
+const FilterElementsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+`
+
+const FieldContainer = styled.div`
+  padding: 8px;
+`;
+
+const ActionsContainer = styled.div`
+  margin-left: 70%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+`;
 
 const fields: Array<FormField> = [
     {
@@ -51,16 +76,17 @@ const fields: Array<FormField> = [
                 {label: 'Above 40', value: 'above 40'},
             ]
         }
-    }
+    },
 ];
 
-const [name, gender, hobbies, vehicle, age ] = fields;
+const [name, gender, hobbies, vehicle, age] = fields;
 
 
 class Home extends React.Component<{}, State> {
 
     state = {
-        showFilterDialog: false
+        showFilterDialog: false,
+        filterData: {}
     }
 
     handleFilterClick = () => {
@@ -75,42 +101,57 @@ class Home extends React.Component<{}, State> {
         });
     }
 
+    handleFilterSubmit = (values: FormikValues, actions: FormikHelpers<FormikValues>) => {
+        actions.setSubmitting(false);
+        this.setState({
+            filterData: values
+        });
+    }
+
+    handleFormReset = (props: FormikProps<FormikValues>) => {
+        props.resetForm();
+        this.setState({
+            filterData: {}
+        });
+    }
+
     render() {
-        const {showFilterDialog} = this.state;
-        return <div>
-            <button onClick={this.handleFilterClick}>clickMe</button>
+        const {showFilterDialog, filterData} = this.state;
+        const filterCount = Object.keys(filterData).length;
+        return <FilterComponentContainer>
+            <button onClick={this.handleFilterClick}>Filters {!!filterCount && `(${filterCount})`}</button>
             <Modal show={showFilterDialog} close={this.handleModalClose}>
                 <Form
-                    initialValues={{}}
-                    handleSubmit={(values, actions) => {
-                        setTimeout(() => {
-                            alert(JSON.stringify(values, null, 2));
-                            actions.setSubmitting(false);
-                        }, 1000);
-                    }}
+                    initialValues={filterData}
+                    handleSubmit={this.handleFilterSubmit}
                     render={(props: FormikProps<FormikValues>) => (
                         <form onSubmit={props.handleSubmit}>
-                            <>
-                                {getFormFields(props, name)}
-                            </>
-                            <>
-                                {getFormFields(props, gender)}
-                            </>
-                            <>
-                                {getFormFields(props, hobbies)}
-                            </>
-                            <>
-                                {getFormFields(props, vehicle)}
-                            </>
-                            <>
-                                {getFormFields(props, age)}
-                            </>
-                            <button type="submit">Submit</button>
+                            <FilterElementsContainer>
+                                <FieldContainer>
+                                    {getFormFields(props, name)}
+                                </FieldContainer>
+                                <FieldContainer>
+                                    {getFormFields(props, gender)}
+                                </FieldContainer>
+                                <FieldContainer>
+                                    {getFormFields(props, hobbies)}
+                                </FieldContainer>
+                                <FieldContainer>
+                                    {getFormFields(props, vehicle)}
+                                </FieldContainer>
+                                <FieldContainer>
+                                    {getFormFields(props, age)}
+                                </FieldContainer>
+                            </FilterElementsContainer>
+                            <ActionsContainer>
+                            <button onClick={() => this.handleFormReset(props) }>Clear All</button>
+                            <button type="submit">Apply Filters</button>
+                            </ActionsContainer>
                         </form>
                     )}
                 />
             </Modal>
-        </div>
+        </FilterComponentContainer>
     }
 }
 
