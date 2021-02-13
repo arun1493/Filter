@@ -12,9 +12,8 @@ interface Props {
 export const input = ({label, value, onBlur, onChange, name}: Props) => {
 
     return <InputContainer>
-    <label> {label}     </label>
-
-    <input
+        <label> {label} </label>
+        <input
             name={name}
             type='text'
             onChange={onChange}

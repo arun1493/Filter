@@ -43,9 +43,9 @@ class Select extends React.Component<Props, State> {
         const {onChange, onBlur, value, name, label} = this.props;
         return (
             <InputContainer>
-            <label> {label}             </label>
+                <label> {label}             </label>
 
-        <select name={name} onChange={(e) => onChange(e)} onBlur={onBlur} value={value || ''}>
+                <select name={name} onChange={(e) => onChange(e)} onBlur={onBlur} value={value || ''}>
                     {map(({label, value}: Option) => <option key={label} value={value}>{label}</option>, options)}
                 </select>
             </InputContainer>

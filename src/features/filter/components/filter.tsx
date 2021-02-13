@@ -3,35 +3,13 @@ import Modal from "../../../lib/modal/components/modal";
 import Form, {getFormFields} from '../../../lib/form/components/form';
 import {ComponentNames, FormField} from "../../../lib/form/types";
 import {FormikHelpers, FormikProps, FormikValues} from "formik";
-import styled from "styled-components";
+import {reduce} from "ramda";
+import {FieldContainer, FilterComponentContainer, FilterElementsContainer, ActionsContainer} from './atoms';
 
 interface State {
     showFilterDialog: boolean;
-    filterData: object;
+    filterData: FormikValues;
 }
-
-const FilterComponentContainer = styled.div`
-  position: relative;
-  top: 180px;
-  left: 330px
-`;
-
-const FilterElementsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-`
-
-const FieldContainer = styled.div`
-  padding: 8px;
-`;
-
-const ActionsContainer = styled.div`
-  margin-left: 70%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-`;
 
 const fields: Array<FormField> = [
     {
@@ -81,8 +59,14 @@ const fields: Array<FormField> = [
 
 const [name, gender, hobbies, vehicle, age] = fields;
 
+const getFilterCount = (values: FormikValues) => {
+    return reduce((acc, key) => {
+        acc = values[key] && values[key].length ? acc + 1 : acc;
+        return acc;
+    }, 0, Object.keys(values));
+};
 
-class Home extends React.Component<{}, State> {
+class Filter extends React.Component<{}, State> {
 
     state = {
         showFilterDialog: false,
@@ -102,14 +86,13 @@ class Home extends React.Component<{}, State> {
     }
 
     handleFilterSubmit = (values: FormikValues, actions: FormikHelpers<FormikValues>) => {
-        actions.setSubmitting(false);
         this.setState({
             filterData: values
         });
     }
 
     handleFormReset = (props: FormikProps<FormikValues>) => {
-        props.resetForm();
+        props.resetForm({values: {}});
         this.setState({
             filterData: {}
         });
@@ -117,42 +100,44 @@ class Home extends React.Component<{}, State> {
 
     render() {
         const {showFilterDialog, filterData} = this.state;
-        const filterCount = Object.keys(filterData).length;
+        const filterCount = getFilterCount(filterData);
         return <FilterComponentContainer>
             <button onClick={this.handleFilterClick}>Filters {!!filterCount && `(${filterCount})`}</button>
             <Modal show={showFilterDialog} close={this.handleModalClose}>
                 <Form
                     initialValues={filterData}
                     handleSubmit={this.handleFilterSubmit}
-                    render={(props: FormikProps<FormikValues>) => (
-                        <form onSubmit={props.handleSubmit}>
-                            <FilterElementsContainer>
-                                <FieldContainer>
-                                    {getFormFields(props, name)}
-                                </FieldContainer>
-                                <FieldContainer>
-                                    {getFormFields(props, gender)}
-                                </FieldContainer>
-                                <FieldContainer>
-                                    {getFormFields(props, hobbies)}
-                                </FieldContainer>
-                                <FieldContainer>
-                                    {getFormFields(props, vehicle)}
-                                </FieldContainer>
-                                <FieldContainer>
-                                    {getFormFields(props, age)}
-                                </FieldContainer>
-                            </FilterElementsContainer>
-                            <ActionsContainer>
-                            <button onClick={() => this.handleFormReset(props) }>Clear All</button>
-                            <button type="submit">Apply Filters</button>
-                            </ActionsContainer>
-                        </form>
-                    )}
+                    render={(props: FormikProps<FormikValues>) => {
+                        return (
+                            <form onSubmit={props.handleSubmit}>
+                                <FilterElementsContainer>
+                                    <FieldContainer>
+                                        {getFormFields(props, name)}
+                                    </FieldContainer>
+                                    <FieldContainer>
+                                        {getFormFields(props, gender)}
+                                    </FieldContainer>
+                                    <FieldContainer>
+                                        {getFormFields(props, hobbies)}
+                                    </FieldContainer>
+                                    <FieldContainer>
+                                        {getFormFields(props, vehicle)}
+                                    </FieldContainer>
+                                    <FieldContainer>
+                                        {getFormFields(props, age)}
+                                    </FieldContainer>
+                                </FilterElementsContainer>
+                                <ActionsContainer>
+                                    <button type='button' onClick={() => this.handleFormReset(props)}>Clear All</button>
+                                    <button type="submit">Apply Filters</button>
+                                </ActionsContainer>
+                            </form>
+                        )
+                    }}
                 />
             </Modal>
         </FilterComponentContainer>
     }
 }
 
-export default Home;
+export default Filter;

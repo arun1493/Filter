@@ -1,13 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
-import Home from "./features/home/components/home";
+import Filter from "./features/filter/components/filter";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Home />
+    <Filter />
   </React.StrictMode>,
   document.getElementById('root')
 );
